@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-linux-agent
+  namespace: ns-test
+  labels:
+    app: pipeline-agent
+    env: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pipeline-agent
+      env: test
+  template:
+    metadata:
+      labels:
+        app: pipeline-agent
+        env: test
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+      containers:
+        - name: azure-linux-agent
+          image: 387345988065.dkr.ecr.us-east-2.amazonaws.com/azure-pipeline-agent:latest
+          imagePullPolicy: Always
+          
+          args: ['--once']
+          env:
+          - name: AZP_URL
+            value: #'https://dev.azure.com/<org-name>'
+          - name: AZP_TOKEN
+            value: #Personal Access Token with sufficient rights
+          - name: AZP_AGENT_NAME
+            value: # agent name that will be displayed in agent pools 
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-volume
+      volumes:
+      - name: docker-volume
+        hostPath:
+          path: /var/run/docker.sock
