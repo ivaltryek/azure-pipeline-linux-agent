@@ -24,7 +24,7 @@ spec:
           - 8.8.8.8
       containers:
         - name: azure-linux-agent
-          image: 387345988065.dkr.ecr.us-east-2.amazonaws.com/azure-pipeline-agent:latest
+          image: # Agent image
           imagePullPolicy: Always
           
           args: ['--once']
